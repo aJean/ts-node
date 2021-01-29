@@ -190,15 +190,16 @@ export function main (argv: string[] = process.argv.slice(2), entrypointArgs: Re
   process.execArgv.unshift(__filename, ...process.argv.slice(2, process.argv.length - args._.length))
   process.argv = [process.argv[1]].concat(scriptPath || []).concat(args._.slice(1))
 
-  // Execute the main contents (either eval, script or piped).
+  // 执行 code string
   if (code !== undefined && !interactive) {
     evalAndExit(replService, module, code, print)
   } else {
+    // 执行 node file
     if (args._.length) {
       Module.runMain()
     } else {
       // Piping of execution _only_ occurs when no other script is specified.
-      // --interactive flag forces REPL
+      // 交互解释器模式
       if (interactive || process.stdin.isTTY) {
         replService.start(code)
       } else {
@@ -284,6 +285,7 @@ function hasOwnProperty (object: any, property: string): boolean {
   return Object.prototype.hasOwnProperty.call(object, property)
 }
 
+// 当前模块是入口模块
 if (require.main === module) {
   main()
 }

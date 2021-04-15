@@ -184,10 +184,13 @@ export function main (argv: string[] = process.argv.slice(2), entrypointArgs: Re
   // Create a local module instance based on `cwd`.
   const module = new Module(state.path)
   module.filename = state.path
+  // 文档找不到的内部方法
   module.paths = (Module as any)._nodeModulePaths(cwd)
 
   // Prepend `ts-node` arguments to CLI for child processes.
+  // node 特定的启动参数，这里把 filename 加上难道是触发编译？要测试一下
   process.execArgv.unshift(__filename, ...process.argv.slice(2, process.argv.length - args._.length))
+  // 执行命令传递的参数
   process.argv = [process.argv[1]].concat(scriptPath || []).concat(args._.slice(1))
 
   // 执行 code string
